@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>DrongoCards</title>
+	<link rel="stylesheet" href="index.css">
+</head>
+<body>
+	<div>
+		<button id="home-create">Create</button>
+		<button id="home-edit">Edit</button>
+		<button id="home-practice">Practice</button>
+	</div>
+	<div id="create-deck-popup" class="popup">
+		<input type="text" id="create-deck-name">
+		<button id="create-deck-create">Create</button>
+	</div>
+	<div id="create-card-popup" class="popup">
+		<input type="text" id="create-deck-japanese-text">
+		<input type="text" id="create-deck-english-text">
+		<button id="create-deck-add">Add</button>
+		<button id="create-deck-finish">Finish</button>
+	</div>
+	<div id="select-deck-popup" class="popup">
+		<div class="deck-list" id="select-deck-list"></div>
+	</div>
+	<div id="practice-screen" class="screen">
+		<p id="practice-japanese"></p>
+		<p id="practice-english"></p>
+		<button id="next-card">Next</button>
+	</div>
+	<script type="module" src="./index.js" ></script>
+</body>
+</html>
