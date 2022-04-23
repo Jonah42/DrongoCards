@@ -7,27 +7,47 @@
 	<link rel="stylesheet" href="index.css">
 </head>
 <body>
-	<div>
-		<button id="home-create">Create</button>
-		<button id="home-edit">Edit</button>
-		<button id="home-practice">Practice</button>
+	<div id="deck-list">
+		<div id="add-deck" class="deck-tile"><div id="add-deck-image" class="deck-tile-image"><div class="emoji-wrapper">+</div></div></div>
 	</div>
 	<div id="create-deck-popup" class="popup">
-		<input type="text" id="create-deck-name">
-		<button id="create-deck-create">Create</button>
+		<div class="popup-content">
+			<h2>Create deck</h2>
+			<div class="label-input">
+				<p>Deck name:</p>
+				<input type="text" id="create-deck-name">
+			</div>
+			<div class="button-flex">
+				<button id="create-deck-create">Create</button>
+				<button id="create-deck-cancel">Cancel</button>
+			</div>
+		</div>
 	</div>
 	<div id="create-card-popup" class="popup">
-		<input type="text" id="create-deck-japanese-text">
-		<input type="text" id="create-deck-english-text">
-		<button id="create-deck-add">Add</button>
-		<button id="create-deck-finish">Finish</button>
-	</div>
-	<div id="select-deck-popup" class="popup">
-		<div class="deck-list" id="select-deck-list"></div>
+		<div class="popup-content">
+			<h2>Add card</h2>
+			<div class="label-input">
+				<p>Japanese:</p>
+				<input type="text" id="create-deck-japanese-text">
+			</div>
+			<div class="label-input">
+				<p>English:</p>
+				<input type="text" id="create-deck-english-text">
+			</div>
+			<div class="button-flex">
+				<button id="create-deck-add">Add</button>
+				<button id="create-deck-finish">Finish</button>
+			</div>
+		</div>
 	</div>
 	<div id="practice-screen" class="screen">
-		<p id="practice-japanese"></p>
-		<p id="practice-english"></p>
+		<h2 id="practice-deck-name"></h2>
+		<div class="prompt">
+			<p id="practice-japanese"></p>
+		</div>
+		<div class="response">
+			<p id="practice-english"></p>
+		</div>
 		<button id="next-card">Next</button>
 	</div>
 	<script type="module" src="./index.js" ></script>

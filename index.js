@@ -1,14 +1,10 @@
 import { bind } from './wanakana.js';
-// import * as wanakana from 'wanakana';
-// const wanakana = require('wanakana');
+import { Card, Deck, DeckTile } from './Deck.js';
 
-let homeCreate = document.getElementById('home-create');
-let homeEdit = document.getElementById('home-edit');
-let homePractice = document.getElementById('home-practice');
+let addDeck = document.getElementById('add-deck');
 
 let createDeckPopup = document.getElementById('create-deck-popup');
 let createCardPopup = document.getElementById('create-card-popup');
-let selectDeckPopup = document.getElementById('select-deck-popup');
 
 let practiceScreen = document.getElementById('practice-screen');
 
@@ -21,15 +17,11 @@ let createDeckEnglishText = document.getElementById('create-deck-english-text');
 let createDeckAdd = document.getElementById('create-deck-add');
 let createDeckFinish = document.getElementById('create-deck-finish');
 
-let selectDeckList = document.getElementById('select-deck-list');
-
 let practiceJapanese = document.getElementById('practice-japanese');
 let practiceEnglish = document.getElementById('practice-english');
 let nextCard = document.getElementById('next-card');
 
-homeCreate.addEventListener('click', createDeck);
-homeEdit.addEventListener('click', editDeck);
-homePractice.addEventListener('click', practiceDeck);
+addDeck.addEventListener('click', createDeck);
 
 createDeckCreate.addEventListener('click', makeDeck);
 
@@ -38,36 +30,7 @@ createDeckFinish.addEventListener('click', finishCreateDeck);
 
 nextCard.addEventListener('click', showNextCard);
 
-class Card {
-	constructor(japanese, english) {
-		this.japanese = japanese;
-		this.english = english;
-	}
-}
 
-class Deck {
-	constructor(deckName) {
-		this.deckName = deckName;
-		this.cards = [];
-		this.currJap = 'empty';
-		this.currEn = 'empty';
-		this.index = 0;
-	}
-
-	addCard(newCard) {
-		if (this.cards.length === 0) {
-			this.currJap = newCard.japanese;
-			this.currEn = newCard.english;
-		}
-		this.cards.push(newCard);
-	}
-
-	next() {
-		this.index = (this.index+1)%this.cards.length;
-		this.currJap = this.cards[this.index].japanese;
-		this.currEn = this.cards[this.index].english;
-	}
-}
 
 
 const numbersJap = ['いち', 'に', 'さん', 'よん', 'ご', 'ろく', 'なな', 'はち', 'きゅ'];
@@ -84,6 +47,10 @@ for (let i = 0; i < numbersJap.length; i++) {
 }
 const decks = [deck1, deck2];
 let currentDeck = deck1;
+
+let deckList = document.getElementById('deck-list');
+let deckTiles = [new DeckTile(deck1, practiceDeck), new DeckTile(deck2, practiceDeck)];
+deckTiles.forEach(dt => {deckList.appendChild(dt.elem);});
 
 function createDeck() {
 	show(createDeckPopup);
@@ -107,37 +74,18 @@ function finishCreateDeck() {
 	createDeckJapaneseText.value = '';
 	createDeckEnglishText.value = '';
 	hide(createCardPopup);
+	const newDeck = new DeckTile(currentDeck, practiceDeck);
+	deckList.appendChild(newDeck.elem);
 }
 
 function editDeck() {
 
 }
 
-function practiceDeck() {
-	show(selectDeckPopup);
-	populateDeckList(selectDeckList);
-}
-
-function populateDeckList(deckList) {
-	deckList.innerHTML = '';
-	decks.forEach(deck => {
-		const elem = document.createElement('button');
-		elem.textContent = deck.deckName;
-		elem.addEventListener('click', startDeckPractice);
-		deckList.appendChild(elem);
-	});
-}
-
-function startDeckPractice(e) {
-	// console.log(e);
-	let str = e.srcElement.innerHTML;
-	decks.forEach(deck => {
-		// console.log("Hello");
-		// console.log(deck.deckName);
-		if (deck.deckName === str) currentDeck = deck;
-	});
-	hide(selectDeckPopup);
+function practiceDeck(deck) {
+	currentDeck = deck;
 	show(practiceScreen);
+	document.getElementById('practice-deck-name').textContent = deck.deckName;
 	practiceJapanese.textContent = currentDeck.currJap;
 	practiceEnglish.textContent = currentDeck.currEn;
 }
