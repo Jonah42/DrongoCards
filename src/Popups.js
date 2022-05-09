@@ -3,6 +3,7 @@ import { DCButton } from './DCButton.js';
 import { randEmoji, randColour } from './utility.js';
 import { collection, doc, setDoc, addDoc } from 'firebase/firestore';
 import { bind } from './wanakana.js';
+import { Session } from './Session.js';
 
 export class CreateCollectionPopup {
 	constructor(db, uid, func) {
@@ -134,6 +135,36 @@ export class AddCardPopup {
     	const res = addDoc(collection(this.db, 'users', this.uid, 'collections', this.collectionID, 'decks', this.deckID, 'cards'), { content : this.contentInput.value(), translation: this.translationInput.value()});
   		this.contentInput.reset();
   		this.translationInput.reset();
+	}
+}
+
+export class DeckTilePopup {
+	constructor(deck) {
+		this.start = this.start.bind(this);
+		this.elem = document.createElement('div');
+		this.elem.className = 'popup';
+		this.deck = deck;
+		const wrapper = document.createElement('div');
+		wrapper.className = 'popup-wrapper';
+		const title = document.createElement('h2');
+		title.textContent = deck.deckName;
+		const num = document.createElement('p');
+		num.textContent = `${deck.length} cards`;
+		num.className = 'deck-tile-popup-num';
+		const buttonWrapper = document.createElement('div');
+		buttonWrapper.className = 'popup-button-wrapper';
+		this.startButton = new DCButton('Start', this.start);
+		buttonWrapper.appendChild(this.startButton.elem);
+		wrapper.appendChild(title);
+		wrapper.appendChild(num);
+		wrapper.appendChild(buttonWrapper);
+		this.elem.appendChild(wrapper);
+		document.body.appendChild(this.elem);
+	}
+
+	start() {
+		document.body.removeChild(this.elem);
+		new Session(this.deck);
 	}
 }
 
