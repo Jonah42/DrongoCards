@@ -2,14 +2,18 @@
 import { DCButton } from './DCButton.js';
 
 export class Session {
-	constructor(deck) {
+	constructor(deck, numCards) {
+		console.log(numCards);
 		this.proceed = this.proceed.bind(this);
 		this.exit = this.exit.bind(this);
+		this.onkeyup = this.onkeyup.bind(this);
 		this.elem = document.createElement('div');
 		this.elem.className = 'session-wrapper';
 		this.deck = deck;
 		this.q = true;
 		this.count = 0;
+		this.numCards = numCards;
+		this.deck.shuffle();
 		const client = document.createElement('div');
 		client.className = 'session-client';
 		const title = document.createElement('h2');
@@ -38,13 +42,15 @@ export class Session {
 		client.appendChild(this.proceedButton.elem);
 		this.elem.appendChild(client);
 		this.elem.appendChild(exitButton);
+		this.elem.addEventListener('keyup', this.onkeyup);
 		document.body.appendChild(this.elem);
+		this.responseBox.focus();
 	}
 
 	proceed() {
 		if (this.q) {
 			this.responseBox.readOnly = true;
-			if (this.responseBox.value === this.deck.currTranslation) {
+			if (this.responseBox.value.toLowerCase() === this.deck.currTranslation.toLowerCase()) {
 				this.remarkBox.style.backgroundColor = 'lightgreen';
 				this.remarkBox.textContent = 'Nice!';
 			} else {
@@ -54,21 +60,30 @@ export class Session {
 			this.remarkBox.style.visibility = 'visible';
 			this.proceedButton.setText('Continue');
 			this.count++;
-			this.progress.update(this.count*100/this.deck.length);
+			this.progress.update(this.count*100/this.numCards);
 			this.q = false;
 		} else {
-			this.remarkBox.style.visibility = 'hidden';
-			this.responseBox.readOnly = false;
-			this.responseBox.value = '';
-			this.proceedButton.setText('Check');
-			this.deck.next();
-			this.contentsBox.textContent = this.deck.currContent;
-			this.q = true;
+			if (this.count === this.numCards) {
+				document.body.removeChild(this.elem);
+			} else {
+				this.remarkBox.style.visibility = 'hidden';
+				this.responseBox.readOnly = false;
+				this.responseBox.value = '';
+				this.responseBox.focus();
+				this.proceedButton.setText('Check');
+				this.deck.next();
+				this.contentsBox.textContent = this.deck.currContent;
+				this.q = true;
+			}
 		}
 	}
 
 	exit() {
 		document.body.removeChild(this.elem);
+	}
+
+	onkeyup(e) {
+		if (e.keyCode == 13) this.proceed();
 	}
 }
 

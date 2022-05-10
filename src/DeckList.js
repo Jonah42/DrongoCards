@@ -9,6 +9,7 @@ export class DeckList {
 	constructor(db, uid, tile) {
 		this.load = this.load.bind(this);
 		this.add = this.add.bind(this);
+		this.remove = this.remove.bind(this);
 		this.createDeck = this.createDeck.bind(this);
 		this.showDeckTilePopup = this.showDeckTilePopup.bind(this);
 		this.db = db;
@@ -28,7 +29,7 @@ export class DeckList {
 				// console.log(doc.id);
 				console.log(doc.data());
 				// id = doc.id;
-				const newTile = new Tile(doc.id, doc.data().name, doc.data().emoji, doc.data().colour, this.showDeckTilePopup);
+				const newTile = new Tile(doc.id, doc.data().name, doc.data().emoji, doc.data().colour, this.showDeckTilePopup, doc.data().lang);
 				this.elem.appendChild(newTile.elem);
 			});
 		} catch (e) {
@@ -40,8 +41,8 @@ export class DeckList {
 		new CreateDeckPopup(this.db, this.uid, this.collectionID, this.add);
 	}
 
-	add(id, name, emoji, colour) {
-		const newTile = new Tile(id, name, emoji, colour, this.showDeckTilePopup); // replace null with function that handles deck click
+	add(id, name, emoji, colour, lang) {
+		const newTile = new Tile(id, name, emoji, colour, this.showDeckTilePopup, lang); // replace null with function that handles deck click
 		this.elem.appendChild(newTile.elem);
 	}
 
@@ -50,8 +51,13 @@ export class DeckList {
 		const deck = new Deck(tile.tileName);
 		cardsSnap.forEach(doc => {
 			// console.log(doc.data());
-			deck.addCard(new Card(doc.data().content, doc.data().translation));
-		})
-		new DeckTilePopup(deck);
+			deck.addCard(new Card(doc.data().content, doc.data().translation, doc.id));
+		});
+		deck.lang = tile.lang;
+		new DeckTilePopup(this.db, this.uid, deck, this.collectionID, tile, this.remove);
+	}
+
+	remove(tile) {
+		this.elem.removeChild(tile.elem);
 	}
 }
