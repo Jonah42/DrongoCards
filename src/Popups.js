@@ -216,8 +216,8 @@ export class DeckTilePopup {
 		wrapper.appendChild(num);
 		wrapper.appendChild(this.numCards.elem);
 		wrapper.appendChild(buttonWrapper);
+		wrapper.appendChild(exitButton);
 		this.elem.appendChild(wrapper);
-		this.elem.appendChild(exitButton);
 		this.elem.addEventListener('keyup', this.onkeyup);
 		document.body.appendChild(this.elem);
 		this.numCards.focus();
@@ -349,8 +349,8 @@ export class EditCollectionPopup {
 		exitButton.src = 'cross.svg';
 		exitButton.addEventListener('click', this.exit);
 		wrapper.appendChild(titleWrapper);
+		wrapper.appendChild(exitButton);
 		this.elem.appendChild(wrapper);
-		this.elem.appendChild(exitButton);
 		document.body.appendChild(this.elem);
 	}
 

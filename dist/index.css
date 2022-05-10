@@ -1,0 +1,29 @@
+body {
+	margin: 0px;
+}
+
+#header {
+	width: 100%;
+	background-color: lightgrey;
+	display: flex;
+	justify-content: space-between;
+	padding: 10px;
+	box-sizing: border-box;
+}
+
+* {
+	font-family: Tahoma;
+}
+
+#title {
+	font-weight: normal;
+	cursor: pointer;
+}
+
+#content {
+	position: relative;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}

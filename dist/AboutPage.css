@@ -1,0 +1,22 @@
+.about-page-wrapper {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: 10vw;
+	box-sizing: border-box;
+	justify-content: center;
+	visibility: hidden;
+	min-height: 70vh;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+.about-page-description {
+
+}
+
+a {
+	color: blueviolet;
+	text-decoration: none;
+}

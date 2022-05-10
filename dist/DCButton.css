@@ -1,0 +1,9 @@
+.dc-button {
+	background-color: blueviolet;
+	padding: 10px;
+	box-sizing: border-box;
+	border-width: 0px;
+	border-radius: 10px;
+	color: white;
+	cursor: pointer;
+}

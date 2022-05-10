@@ -1,0 +1,14 @@
+.toolbar {
+	display: flex;
+	gap:  10px;
+	align-items: center;
+}
+
+.toolbar-button {
+	background-color: whitesmoke;
+	border-width: 0px;
+	border-radius: 8px;
+	padding: 10px;
+	font-size: 18px;
+	cursor: pointer;
+}
