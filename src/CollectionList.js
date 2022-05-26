@@ -21,7 +21,9 @@ export class CollectionList {
 	}
 
 	async load() {
+		console.log("Loading");
 		const collections = await getDocs(collection(this.db, 'users', this.uid, 'collections'));
+		console.log("hmm");
 		collections.forEach(doc => {
 			// console.log(doc);
 			// console.log(doc.id);

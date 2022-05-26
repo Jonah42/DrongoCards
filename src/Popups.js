@@ -50,6 +50,7 @@ export class CreateCollectionPopup {
 
 	onkeyup(e) {
 		if (e.keyCode == 13) this.create();
+		else if (e.keyCode == 27) this.cancel();
 	}
 }
 
@@ -109,6 +110,7 @@ export class CreateDeckPopup {
 
 	onkeyup(e) {
 		if (e.keyCode == 13) this.create();
+		else if (e.keyCode == 27) this.cancel();
 	}
 }
 
@@ -163,6 +165,7 @@ export class AddCardPopup {
 
 	onkeyup(e) {
 		if (e.keyCode == 13) this.add();
+		else if (e.keyCode == 27) this.finish();
 	}
 }
 
@@ -184,9 +187,11 @@ export class DeckTilePopup {
 		this.remove = remove;
 		const wrapper = document.createElement('div');
 		wrapper.className = 'popup-wrapper';
+		// Title bar
 		const titleWrapper = document.createElement('div');
 		titleWrapper.className = 'popup-title-wrapper';
 		const title = document.createElement('h2');
+		title.className = 'popup-title';
 		title.textContent = deck.deckName;
 		const editButton = document.createElement('img');
 		editButton.className = 'popup-edit-button';
@@ -199,11 +204,25 @@ export class DeckTilePopup {
 		titleWrapper.appendChild(title);
 		titleWrapper.appendChild(editButton);
 		titleWrapper.appendChild(delButton);
+		// Subheading
 		const num = document.createElement('p');
 		num.textContent = `${deck.length} cards`;
 		num.className = 'popup-subheading';
+		// Mode select
+		const modeSelect = document.createElement('div');
+		modeSelect.className = 'popup-mode-select-wrapper';
+		let langText = '';
+		for (const [key, value] of Object.entries(languages)) {
+			if (value === this.deck.lang) langText = key.slice(0,1).toUpperCase() + key.slice(1);
+		}
+		this.op1 = new PopupCheckbox('op1', `${langText} text to English text`);
+		this.op2 = new PopupCheckbox('op2', `${langText} sound to English text`);
+		modeSelect.appendChild(this.op1.elem);
+		modeSelect.appendChild(this.op2.elem);
+		// Number of Cards
 		this.numCards = new PopupInput('Cards:');
 		this.numCards.restrictToNums();
+		// Button bar
 		const buttonWrapper = document.createElement('div');
 		buttonWrapper.className = 'popup-button-wrapper';
 		this.startButton = new DCButton('Start', this.start);
@@ -212,8 +231,10 @@ export class DeckTilePopup {
 		exitButton.src = 'cross.svg';
 		exitButton.addEventListener('click', this.exit);
 		buttonWrapper.appendChild(this.startButton.elem);
+		// Put it all together
 		wrapper.appendChild(titleWrapper);
 		wrapper.appendChild(num);
+		wrapper.appendChild(modeSelect);
 		wrapper.appendChild(this.numCards.elem);
 		wrapper.appendChild(buttonWrapper);
 		wrapper.appendChild(exitButton);
@@ -224,15 +245,21 @@ export class DeckTilePopup {
 	}
 
 	start() {
-		console.log(this.numCards.value());
+		let mode = 0;
+		mode |= this.op1.checked();
+		mode |= this.op2.checked() << 1;
 		const n = parseInt(this.numCards.value());
 		if (!n || n <= 0) {
 			alert('Please supply the number of cards to use');
 			return;
 		}
+		if (mode === 0) {
+			alert('Please choose at least one mode');
+			return;
+		}
 		document.body.removeChild(this.elem);
-		console.log(typeof(n));
-		new Session(this.deck, n);
+		console.log(mode);
+		new Session(this.deck, n, mode);
 	}
 
 	exit() {
@@ -241,6 +268,7 @@ export class DeckTilePopup {
 
 	onkeyup(e) {
 		if (e.keyCode == 13) this.start();
+		else if (e.keyCode == 27) this.exit();
 	}
 
 	edit() {
@@ -312,6 +340,7 @@ export class EditTilePopup {
 
 	onkeyup(e) {
 		if (e.keyCode == 13) this.save();
+		else if (e.keyCode == 27) this.cancel();
 	}
 }
 
@@ -320,6 +349,7 @@ export class EditCollectionPopup {
 		this.exit = this.exit.bind(this);
 		this.edit = this.edit.bind(this);
 		this.del = this.del.bind(this);
+		this.onkeyup = this.onkeyup.bind(this);
 		this.elem = document.createElement('div');
 		this.elem.className = 'popup';
 		this.db = db;
@@ -351,7 +381,11 @@ export class EditCollectionPopup {
 		wrapper.appendChild(titleWrapper);
 		wrapper.appendChild(exitButton);
 		this.elem.appendChild(wrapper);
+		console.log(this.onkeyup);
+		this.elem.addEventListener('keyup', this.onkeyup);
 		document.body.appendChild(this.elem);
+		this.elem.tabIndex = -1;
+		this.elem.focus();
 	}
 
 	exit() {
@@ -379,6 +413,10 @@ export class EditCollectionPopup {
 		
 		this.remove(this.tile);
 		this.exit();
+	}
+
+	onkeyup(e) {
+		if (e.keyCode == 27) this.exit();
 	}
 }
 
@@ -439,5 +477,31 @@ export class PopupSelect {
 
 	value() {
 		return this.select.value;
+	}
+}
+
+export class PopupCheckbox {
+	constructor(name, text) {
+		this.checked = this.checked.bind(this);
+		this.labelClick = this.labelClick.bind(this);
+		this.elem = document.createElement('div');
+		this.elem.className = 'popup-checkbox-wrapper';
+		this.checkbox = document.createElement('input');
+		this.checkbox.type = 'checkbox';
+		this.checkbox.name = name;
+		const label = document.createElement('label');
+		label.for = name;
+		label.textContent = text;
+		label.addEventListener('click', this.labelClick);
+		this.elem.appendChild(this.checkbox);
+		this.elem.appendChild(label);
+	}
+
+	labelClick() {
+		this.checkbox.click();
+	}
+
+	checked() {
+		return this.checkbox.checked;
 	}
 }

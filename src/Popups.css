@@ -27,6 +27,10 @@
 	position: relative;
 }
 
+.popup-title {
+	margin: 0px;
+}
+
 .popup-title-wrapper {
 	display: flex;
 	gap: 10px;
@@ -48,6 +52,7 @@
 
 .popup-subheading {
 	color: grey;
+	margin: 0px;
 }
 
 .popup-exit-button {
@@ -63,4 +68,9 @@
 	width: 20px;
 	height: 20px;
 	cursor: pointer;
+}
+
+.popup-mode-select-wrapper {
+	display: flex;
+	flex-direction: column;
 }

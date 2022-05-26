@@ -39,9 +39,12 @@ export class Deck {
 	}
 
 	shuffle() {
+		this.index = 0;
 		for (let i = this.cards.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
 			[this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]];
 		}
+		this.currContent = this.cards[this.index].content;
+		this.currTranslation = this.cards[this.index].translation;
 	}
 }
