@@ -82,16 +82,16 @@ export class Session {
 	proceed() {
 		if (this.q) {
 			this.responseBox.readOnly = true;
-			const c = this.compare(this.responseBox.value, this.deck.currTranslation);
+			const c = this.compare(this.responseBox.value, isLangSoundToLangText(this.currMode) ? this.deck.currContent : this.deck.currTranslation);
 			if (c == 1) {
 				this.remarkBox.style.backgroundColor = 'lightgreen';
 				this.remarkBox.textContent = 'Nice!';
 			} else if (c == 2) {
 				this.remarkBox.style.backgroundColor = 'peachpuff';
-				this.remarkBox.textContent = `Careful - you have a typo. Correct response was '${this.deck.currTranslation}'`;
+				this.remarkBox.textContent = `Careful - you have a typo. Correct response was '${isLangSoundToLangText(this.currMode) ? this.deck.currContent : this.deck.currTranslation}'`;
 			} else {
 				this.remarkBox.style.backgroundColor = 'salmon';
-				this.remarkBox.textContent = `The correct answer was '${this.deck.currTranslation}'`;
+				this.remarkBox.textContent = `The correct answer was '${isLangSoundToLangText(this.currMode) ? this.deck.currContent : this.deck.currTranslation}'`;
 			}
 			this.remarkBox.style.visibility = 'visible';
 			this.proceedButton.setText('Continue');
@@ -202,6 +202,10 @@ function LevenshteinDistance(s, t) {
 
 function isLangTextToEngText(mode) {
 	return mode&0x1;	
+}
+
+function isLangSoundToLangText(mode) {
+	return mode&0x4;	
 }
 
 function isLangSoundToEngSound(mode) {

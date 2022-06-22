@@ -217,8 +217,10 @@ export class DeckTilePopup {
 		}
 		this.op1 = new PopupCheckbox('op1', `${langText} text to English text`);
 		this.op2 = new PopupCheckbox('op2', `${langText} sound to English text`);
+		this.op3 = new PopupCheckbox('op3', `${langText} sound to ${langText} text`);
 		modeSelect.appendChild(this.op1.elem);
 		modeSelect.appendChild(this.op2.elem);
+		modeSelect.appendChild(this.op3.elem);
 		// Number of Cards
 		this.numCards = new PopupInput('Cards:');
 		this.numCards.restrictToNums();
@@ -248,6 +250,7 @@ export class DeckTilePopup {
 		let mode = 0;
 		mode |= this.op1.checked();
 		mode |= this.op2.checked() << 1;
+		mode |= this.op3.checked() << 2;
 		const n = parseInt(this.numCards.value());
 		if (!n || n <= 0) {
 			alert('Please supply the number of cards to use');
@@ -434,8 +437,8 @@ export class PopupInput {
 		this.input.type = 'text';
 		console.log(lang);
 		if (lang === 'ja-JP') {
-			console.log('bound');
-			bind(this.input);
+			//console.log('bound');
+			//bind(this.input);
 		}
 		this.elem.appendChild(label);
 		this.elem.appendChild(this.input);
